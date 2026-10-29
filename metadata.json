@@ -1,0 +1,6 @@
+{
+  "name": "PUNARNAVA - T2A Trash-to-Ayurveda Waste-to-Resource Ecosystem",
+  "description": "Unified platform transforming temple flowers, kitchen bio-waste, agricultural stubble, and cattle biomass into certified Ayurvedic botanical remedies, organic bio-slurry, clean CBG energy, and formalized scrap liquidity.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,327 @@
+{
+  "entities": {
+    "FarmerProfile": {
+      "title": "FarmerProfile",
+      "description": "Registered farmer profile with 10-Digit UBID and biomass totals",
+      "type": "object",
+      "properties": {
+        "ubid": {
+          "type": "string",
+          "description": "10-Digit Unique Biomass ID",
+          "maxLength": 16,
+          "pattern": "^[0-9]{10}$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the farmer",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact mobile number",
+          "maxLength": 20
+        },
+        "village": {
+          "type": "string",
+          "description": "Village name",
+          "maxLength": 100
+        },
+        "gramPanchayat": {
+          "type": "string",
+          "description": "Gram Panchayat identifier",
+          "maxLength": 100
+        },
+        "district": {
+          "type": "string",
+          "description": "District",
+          "maxLength": 60
+        },
+        "state": {
+          "type": "string",
+          "description": "State",
+          "maxLength": 60
+        },
+        "totalDungKg": {
+          "type": "number",
+          "description": "Aggregated cattle dung contributed in kg"
+        },
+        "totalStubbleKg": {
+          "type": "number",
+          "description": "Aggregated crop residue stubble contributed in kg"
+        },
+        "walletBalance": {
+          "type": "number",
+          "description": "Current wallet cash balance in INR"
+        },
+        "bioSlurryQuotaLiters": {
+          "type": "number",
+          "description": "Earned free organic bio-slurry quota in liters"
+        },
+        "ownerUid": {
+          "type": "string",
+          "description": "Firebase Auth UID if linked to Google Sign-In",
+          "maxLength": 128
+        }
+      },
+      "required": ["ubid", "name", "village", "walletBalance", "bioSlurryQuotaLiters"]
+    },
+    "LedgerEntry": {
+      "title": "LedgerEntry",
+      "description": "Deposit transaction logged by village cooperative smart scale",
+      "type": "object",
+      "properties": {
+        "receiptNo": {
+          "type": "string",
+          "description": "Unique transaction receipt number",
+          "maxLength": 50
+        },
+        "dateTime": {
+          "type": "string",
+          "description": "Human readable date and time stamp",
+          "maxLength": 50
+        },
+        "biomassType": {
+          "type": "string",
+          "description": "Category of biomass deposited",
+          "enum": ["Cattle Dung", "Crop Residue / Stubble", "Agri-Husk / Straw"]
+        },
+        "weightKg": {
+          "type": "number",
+          "description": "Weighed deposit quantity in kg"
+        },
+        "qualityGrade": {
+          "type": "string",
+          "description": "Moisture quality assessment",
+          "maxLength": 60
+        },
+        "ratePerKg": {
+          "type": "number",
+          "description": "Buying rate in INR per kg"
+        },
+        "walletCredit": {
+          "type": "number",
+          "description": "Earnings credited to wallet in INR"
+        },
+        "bioSlurryQuotaEarnedLiters": {
+          "type": "number",
+          "description": "Free bio-slurry quota earned in liters"
+        },
+        "loggedByManager": {
+          "type": "string",
+          "description": "Village cooperative manager identifier",
+          "maxLength": 100
+        },
+        "adminId": {
+          "type": "string",
+          "description": "Admin ID of manager",
+          "maxLength": 50
+        }
+      },
+      "required": ["receiptNo", "biomassType", "weightKg", "ratePerKg", "walletCredit"]
+    },
+    "BioSlurryVoucher": {
+      "title": "BioSlurryVoucher",
+      "description": "Digital voucher to collect free organic bio-slurry fertilizer",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Unique voucher redemption code",
+          "maxLength": 40
+        },
+        "quantityLiters": {
+          "type": "number",
+          "description": "Quantity in liters"
+        },
+        "issueDate": {
+          "type": "string",
+          "description": "Date of voucher creation",
+          "maxLength": 30
+        },
+        "expiryDate": {
+          "type": "string",
+          "description": "Date of expiration",
+          "maxLength": 30
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status",
+          "enum": ["Available", "Redeemed"]
+        },
+        "collectionHub": {
+          "type": "string",
+          "description": "Designated dispenser tank location",
+          "maxLength": 120
+        }
+      },
+      "required": ["code", "quantityLiters", "status"]
+    },
+    "SmsLog": {
+      "title": "SmsLog",
+      "description": "Cellular SMS dispatched to farmer's mobile",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of dispatch",
+          "maxLength": 40
+        },
+        "sender": {
+          "type": "string",
+          "description": "Sender header",
+          "maxLength": 20
+        },
+        "message": {
+          "type": "string",
+          "description": "Text message content",
+          "maxLength": 300
+        },
+        "status": {
+          "type": "string",
+          "description": "Delivery status",
+          "maxLength": 20
+        }
+      },
+      "required": ["timestamp", "sender", "message"]
+    },
+    "PriceRecord": {
+      "title": "PriceRecord",
+      "description": "Official village cooperative buy rate per kg",
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "Biomass stream",
+          "enum": ["Cattle Dung", "Crop Residue / Stubble", "Agri-Husk / Straw"]
+        },
+        "ratePerKg": {
+          "type": "number",
+          "description": "Price in INR per kg"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Weight unit",
+          "maxLength": 10
+        },
+        "energyYield": {
+          "type": "string",
+          "description": "CBG/Biogas output per kg",
+          "maxLength": 50
+        },
+        "fertilizerYield": {
+          "type": "string",
+          "description": "Bio-slurry output per kg",
+          "maxLength": 50
+        }
+      },
+      "required": ["category", "ratePerKg"]
+    },
+    "VillageStorage": {
+      "title": "VillageStorage",
+      "description": "Aggregated cooperative holding metrics",
+      "type": "object",
+      "properties": {
+        "currentTonnes": {
+          "type": "number",
+          "description": "Current aggregated storage in tonnes"
+        },
+        "thresholdTonnes": {
+          "type": "number",
+          "description": "Economic dispatch threshold in tonnes"
+        },
+        "villageCenter": {
+          "type": "string",
+          "description": "Name of village cooperative center",
+          "maxLength": 120
+        },
+        "centerId": {
+          "type": "string",
+          "description": "Center code",
+          "maxLength": 50
+        },
+        "holdingDungKg": {
+          "type": "number",
+          "description": "Holding dung in kg"
+        },
+        "holdingStubbleKg": {
+          "type": "number",
+          "description": "Holding stubble in kg"
+        },
+        "lastDispatchDate": {
+          "type": "string",
+          "description": "Timestamp of previous milk-run evacuation",
+          "maxLength": 50
+        }
+      },
+      "required": ["currentTonnes", "thresholdTonnes", "villageCenter"]
+    },
+    "AdminProfile": {
+      "title": "AdminProfile",
+      "description": "Authorized cooperative manager and supervisor",
+      "type": "object",
+      "properties": {
+        "adminId": {
+          "type": "string",
+          "description": "Unique admin code",
+          "maxLength": 50
+        },
+        "email": {
+          "type": "string",
+          "description": "Admin email",
+          "maxLength": 120
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name",
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "description": "Role description",
+          "maxLength": 100
+        },
+        "centerName": {
+          "type": "string",
+          "description": "Center name",
+          "maxLength": 120
+        },
+        "centerCode": {
+          "type": "string",
+          "description": "Center code",
+          "maxLength": 50
+        }
+      },
+      "required": ["email", "name", "centerCode"]
+    }
+  },
+  "firestore": {
+    "/farmers/{farmerId}": {
+      "schema": "FarmerProfile",
+      "description": "Registered farmer accounts and biomass totals"
+    },
+    "/farmers/{farmerId}/ledger/{ledgerId}": {
+      "schema": "LedgerEntry",
+      "description": "Deposit transaction ledger entries"
+    },
+    "/farmers/{farmerId}/vouchers/{voucherId}": {
+      "schema": "BioSlurryVoucher",
+      "description": "Free bio-slurry pickup vouchers"
+    },
+    "/farmers/{farmerId}/smsLogs/{smsId}": {
+      "schema": "SmsLog",
+      "description": "Simulated GSM SMS alert logs"
+    },
+    "/prices/{priceId}": {
+      "schema": "PriceRecord",
+      "description": "Real-time buying rates per kg"
+    },
+    "/villageStorage/{storageId}": {
+      "schema": "VillageStorage",
+      "description": "Village cooperative collection center holding status"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminProfile",
+      "description": "Authorized village cooperative supervisors"
+    }
+  }
+}

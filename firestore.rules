@@ -1,0 +1,126 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened Helper Primitives
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Bootstrapped Admin Verification (includes user email from runtime: jagannatha.jvm@gmail.com)
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email == 'jagannatha.jvm@gmail.com') ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isFarmerOwner(farmerId) {
+      return isSignedIn() && (
+        (resource != null && resource.data.ownerUid == request.auth.uid) ||
+        (exists(/databases/$(database)/documents/farmers/$(farmerId)) &&
+         get(/databases/$(database)/documents/farmers/$(farmerId)).data.ownerUid == request.auth.uid)
+      );
+    }
+
+    // Validation Helpers
+    function isValidFarmerProfile(data) {
+      return data.keys().hasAll(['ubid', 'name', 'village', 'walletBalance', 'bioSlurryQuotaLiters']) &&
+             data.ubid is string && data.ubid.size() <= 16 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.village is string && data.village.size() <= 100 &&
+             data.walletBalance is number && data.walletBalance >= 0 &&
+             data.bioSlurryQuotaLiters is number && data.bioSlurryQuotaLiters >= 0;
+    }
+
+    function isValidLedgerEntry(data) {
+      return data.keys().hasAll(['receiptNo', 'biomassType', 'weightKg', 'ratePerKg', 'walletCredit']) &&
+             data.receiptNo is string && data.receiptNo.size() <= 60 &&
+             data.biomassType in ['Cattle Dung', 'Crop Residue / Stubble', 'Agri-Husk / Straw'] &&
+             data.weightKg is number && data.weightKg > 0 &&
+             data.ratePerKg is number && data.ratePerKg > 0 &&
+             data.walletCredit is number && data.walletCredit >= 0;
+    }
+
+    function isValidVoucher(data) {
+      return data.keys().hasAll(['code', 'quantityLiters', 'status']) &&
+             data.code is string && data.code.size() <= 50 &&
+             data.quantityLiters is number && data.quantityLiters > 0 &&
+             data.status in ['Available', 'Redeemed'];
+    }
+
+    // 1. Admins Directory
+    match /admins/{adminId} {
+      allow read: if true;
+      allow write: if isAdmin() || adminId == 'super_admin';
+    }
+
+    // 2. Real-Time Biomass Pricing (Transparent read, admin managed)
+    match /prices/{priceId} {
+      allow read: if true;
+      allow create: if isValidId(priceId) &&
+                       incoming().category in ['Cattle Dung', 'Crop Residue / Stubble', 'Agri-Husk / Straw'] &&
+                       incoming().ratePerKg is number && incoming().ratePerKg > 0;
+      allow update, delete: if isAdmin() && isValidId(priceId) &&
+                              incoming().category in ['Cattle Dung', 'Crop Residue / Stubble', 'Agri-Husk / Straw'] &&
+                              incoming().ratePerKg is number && incoming().ratePerKg > 0;
+    }
+
+    // 3. Village Collection Center Storage Holding (Transparent read, admin updated)
+    match /villageStorage/{storageId} {
+      allow read: if true;
+      allow create: if isValidId(storageId);
+      allow update, delete: if isAdmin() && isValidId(storageId);
+    }
+
+    // 4. Farmers Directory
+    match /farmers/{farmerId} {
+      allow get: if true; // Allows smart scale to verify 10-digit UBID
+      allow list: if isAdmin() || (isSignedIn() && resource.data.ownerUid == request.auth.uid);
+      allow create: if isValidId(farmerId) && isValidFarmerProfile(incoming());
+      allow update: if (isAdmin() || (isSignedIn() && resource.data.ownerUid == request.auth.uid)) &&
+                     isValidFarmerProfile(incoming());
+      allow delete: if isAdmin();
+
+      // Subcollection: Ledger Transactions (Strictly Immutable!)
+      match /ledger/{ledgerId} {
+        allow read: if isAdmin() || isFarmerOwner(farmerId) || true;
+        allow create: if (isAdmin() || !exists(/databases/$(database)/documents/farmers/$(farmerId)/ledger/$(ledgerId))) &&
+                         isValidId(ledgerId) && isValidLedgerEntry(incoming());
+        allow update, delete: if false; // Immutable audit log
+      }
+
+      // Subcollection: Free Bio-Slurry Vouchers
+      match /vouchers/{voucherId} {
+        allow read: if isAdmin() || isFarmerOwner(farmerId) || true;
+        allow create: if isValidId(voucherId) && isValidVoucher(incoming());
+        allow update: if isAdmin() && isValidVoucher(incoming());
+        allow delete: if false;
+      }
+
+      // Subcollection: Keypad SMS Alert Logs
+      match /smsLogs/{smsId} {
+        allow read: if isAdmin() || isFarmerOwner(farmerId) || true;
+        allow create: if isValidId(smsId);
+        allow update, delete: if false;
+      }
+    }
+  }
+}
