@@ -76,7 +76,7 @@ export const LoginView: React.FC = () => {
       <div
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none"
         style={{
-          backgroundImage: `url('/assets/aistudio/image_306a5fa8.png'), url('https://www.xylem.com/siteassets/solutions/energy/biogas_pl.png')`,
+          backgroundImage: `url('/assets/aistudio/image_306a5fa8.png'), url('/assets/biogas_plant.png')`,
         }}
       >
         {/* Rich dark overlay gradient for readability with sunset biogas refinery atmospheric presence */}

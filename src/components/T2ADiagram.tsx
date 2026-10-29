@@ -46,10 +46,12 @@ export const T2ADiagram: React.FC = () => {
         {/* Left Column: Visual Asset */}
         <div className="lg:col-span-5 relative min-h-[340px] lg:min-h-full bg-slate-100 flex flex-col justify-end p-6">
           <img
-            src="/src/assets/images/t2a_biorefinery_process_1793281154502.jpg"
+            src="/images/t2a_biorefinery_process_1793281154502.jpg"
             alt="PUNARNAVA Agri-Biomass and Bio-Slurry Refinery"
-            referrerPolicy="no-referrer"
             className="absolute inset-0 w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-transparent pointer-events-none" />
           

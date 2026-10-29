@@ -25,7 +25,7 @@ export const HomeView: React.FC = () => {
       <div
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-700"
         style={{
-          backgroundImage: `url('https://static.vecteezy.com/system/resources/thumbnails/037/292/672/small_2x/ai-generated-cow-on-a-green-field-with-pasture-photo.jpg')`,
+          backgroundImage: `url('/assets/cow_pasture.jpg'), url('https://static.vecteezy.com/system/resources/thumbnails/037/292/672/small_2x/ai-generated-cow-on-a-green-field-with-pasture-photo.jpg')`,
           backgroundPosition: 'center 20%',
         }}
       >
@@ -35,140 +35,152 @@ export const HomeView: React.FC = () => {
 
       <div className="relative z-10 space-y-20 pb-20">
         
-        {/* 1. HERO SECTION */}
-        <section className="relative pt-6 sm:pt-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+        {/* 1. HERO SECTION WITH FIXED, DARKENED COW-IN-PASTURE BACKGROUND OVERLAY */}
+        <section className="relative overflow-hidden py-14 sm:py-20 -mt-6">
+          {/* Fixed Cow-in-Pasture background */}
+          <div
+            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none"
+            style={{
+              backgroundImage: `url('/assets/cow_pasture.jpg'), url('https://static.vecteezy.com/system/resources/thumbnails/037/292/672/small_2x/ai-generated-cow-on-a-green-field-with-pasture-photo.jpg')`,
+              backgroundAttachment: 'fixed',
+              backgroundPosition: 'center 20%',
+            }}
+          />
+          {/* Darkened overlay to ensure text contrast is maintained */}
+          <div className="absolute inset-0 z-0 bg-stone-950/80 backdrop-blur-[1.5px]" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-stone-950/90 via-stone-900/80 to-stone-950/85" />
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {/* Left Column: Value Proposition & Tagline */}
-            <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
               
-              {/* Mandatory Tagline Banner */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 w-fit">
-                <Sprout className="w-4 h-4 text-[#14532D] shrink-0" />
-                <span className="text-xs font-bold tracking-tight">
-                  "From Stubble & Dung to Clean Energy & Fertile Soil"
-                </span>
-              </div>
-
-              <div className="space-y-3">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.08] text-balance">
-                  PUNARNAVA
-                </h1>
-                <p className="text-xl sm:text-2xl font-bold text-[#14532D] tracking-tight">
-                  Rural India's Unified Cow Dung & Agri-Biomass Bank
-                </p>
-                <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl text-balance">
-                  Eliminating crop stubble burning and open cattle dung dumping. An Amul-style village cooperative converting rural agricultural residue into GOBARdhan Compressed Biogas (CBG) and free organic bio-slurry fertilizer.
-                </p>
-              </div>
-
-              {/* High-Impact CTA Buttons: [Explore Biomass Engine] and [Login to Portal] */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <button
-                  onClick={() => {
-                    const el = document.getElementById('three-pillars');
-                    el?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-6 py-3.5 text-sm font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl transition-all hover:border-slate-400 shadow-sm cursor-pointer whitespace-nowrap"
-                >
-                  Explore Biomass Engine
-                </button>
-                <button
-                  onClick={() => setCurrentView('login')}
-                  className="px-6 py-3.5 text-sm font-bold text-white bg-[#14532D] hover:bg-[#0f3f22] rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer whitespace-nowrap"
-                >
-                  <span>Login to Portal</span>
-                  <ArrowRight className="w-4 h-4 text-emerald-300" />
-                </button>
-              </div>
-
-              {/* Key Trust Signals */}
-              <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-slate-500 font-medium">
-                <div className="flex items-center gap-1.5 text-slate-700">
-                  <ShieldCheck className="w-4 h-4 text-[#14532D]" />
-                  <span>Tamper-Proof Read-Only Farmer Ledger</span>
+              {/* Left Column: Value Proposition & Tagline */}
+              <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
+                
+                {/* Mandatory Tagline Banner */}
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-400/40 text-emerald-300 w-fit backdrop-blur-md shadow-sm">
+                  <Sprout className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span className="text-xs font-bold tracking-tight">
+                    "From Stubble & Dung to Clean Energy & Fertile Soil"
+                  </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-slate-700">
-                  <PhoneCall className="w-4 h-4 text-[#0F766E]" />
-                  <span>Instant 2G Keypad Phone SMS Receipts</span>
+
+                <div className="space-y-3">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.08] text-balance drop-shadow-md">
+                    PUNARNAVA
+                  </h1>
+                  <p className="text-xl sm:text-2xl font-bold text-emerald-400 tracking-tight drop-shadow">
+                    Rural India's Unified Cow Dung & Agri-Biomass Bank
+                  </p>
+                  <p className="text-base sm:text-lg text-stone-200 leading-relaxed max-w-xl text-balance drop-shadow-sm">
+                    Eliminating crop stubble burning and open cattle dung dumping. An Amul-style village cooperative converting rural agricultural residue into GOBARdhan Compressed Biogas (CBG) and free organic bio-slurry fertilizer.
+                  </p>
+                </div>
+
+                {/* High-Impact CTA Buttons: [Explore Biomass Engine] and [Login to Portal] */}
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById('three-pillars');
+                      el?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="px-6 py-3.5 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl transition-all hover:border-white/50 shadow-md cursor-pointer whitespace-nowrap backdrop-blur-md"
+                  >
+                    Explore Biomass Engine
+                  </button>
+                  <button
+                    onClick={() => setCurrentView('login')}
+                    className="px-6 py-3.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl transition-all shadow-lg hover:shadow-emerald-900/50 flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                  >
+                    <span>Login to Portal</span>
+                    <ArrowRight className="w-4 h-4 text-emerald-200" />
+                  </button>
+                </div>
+
+                {/* Key Trust Signals */}
+                <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-stone-300 font-medium">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    <span>Tamper-Proof Read-Only Farmer Ledger</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <PhoneCall className="w-4 h-4 text-emerald-400" />
+                    <span>Instant 2G Keypad Phone SMS Receipts</span>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Right Column: Visual Focal Carrier */}
+              <div className="lg:col-span-5 relative min-h-[340px] lg:min-h-full rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
+                <img
+                  src="/images/hero_biomass_ecosystem_1793281153886.jpg"
+                  alt="Rural India Biomass Bank and GOBARdhan CBG plant"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent pointer-events-none" />
+                <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
+                  <span className="text-[11px] font-bold tracking-wider uppercase text-emerald-300">
+                    Village Cooperative Model
+                  </span>
+                  <p className="text-sm font-semibold text-slate-100">
+                    Daily weighment of cow dung and crop stubble with instant mobile wallet credits.
+                  </p>
                 </div>
               </div>
 
             </div>
 
-            {/* Right Column: Visual Focal Carrier */}
-            <div className="lg:col-span-5 relative min-h-[340px] lg:min-h-full rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
-              <img
-                src="/src/assets/images/hero_biomass_ecosystem_1793281153886.jpg"
-                alt="Rural India Biomass Bank and GOBARdhan CBG plant"
-                referrerPolicy="no-referrer"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                <span className="text-[11px] font-bold tracking-wider uppercase text-emerald-300">
-                  Village Cooperative Model
+            {/* 4-Column Rural Proof & KPI Strip */}
+            <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-white/95 backdrop-blur-md rounded-2xl border border-white/40 shadow-2xl text-slate-900">
+              <div>
+                <span className="text-xs text-slate-500 font-medium block">
+                  Total Cattle Dung Collected
                 </span>
-                <p className="text-sm font-semibold text-slate-100">
-                  Daily weighment of cow dung and crop stubble with instant mobile wallet credits.
-                </p>
+                <span className="text-2xl sm:text-3xl font-extrabold text-[#14532D] font-mono tabular-nums">
+                  1,120.0 <span className="text-sm font-sans font-semibold text-slate-500">kg</span>
+                </span>
+                <span className="text-[11px] text-emerald-800 font-semibold mt-0.5 block">
+                  Fed to GOBARdhan CBG digesters
+                </span>
+              </div>
+              <div>
+                <span className="text-xs text-slate-500 font-medium block">
+                  Crop Stubble Diverted
+                </span>
+                <span className="text-2xl sm:text-3xl font-extrabold text-amber-700 font-mono tabular-nums">
+                  720.5 <span className="text-sm font-sans font-semibold text-slate-500">kg</span>
+                </span>
+                <span className="text-[11px] text-amber-800 font-semibold mt-0.5 block">
+                  Zero open-field smoke burning
+                </span>
+              </div>
+              <div>
+                <span className="text-xs text-slate-500 font-medium block">
+                  Farmer Wallet Credits Paid
+                </span>
+                <span className="text-2xl sm:text-3xl font-extrabold text-[#14532D] font-mono tabular-nums">
+                  ₹3,510.00
+                </span>
+                <span className="text-[11px] text-slate-600 font-semibold mt-0.5 block">
+                  Direct village cooperative payout
+                </span>
+              </div>
+              <div>
+                <span className="text-xs text-slate-500 font-medium block">
+                  Free Bio-Slurry Reclaimed
+                </span>
+                <span className="text-2xl sm:text-3xl font-extrabold text-[#0F766E] font-mono tabular-nums">
+                  595 <span className="text-sm font-sans font-semibold text-slate-500">Liters</span>
+                </span>
+                <span className="text-[11px] text-teal-800 font-semibold mt-0.5 block">
+                  Rebuilding farm soil organic carbon
+                </span>
               </div>
             </div>
 
           </div>
-
-          {/* 4-Column Rural Proof & KPI Strip */}
-          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
-            <div>
-              <span className="text-xs text-slate-500 font-medium block">
-                Total Cattle Dung Collected
-              </span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#14532D] font-mono tabular-nums">
-                1,120.0 <span className="text-sm font-sans font-semibold text-slate-500">kg</span>
-              </span>
-              <span className="text-[11px] text-emerald-800 font-semibold mt-0.5 block">
-                Fed to GOBARdhan CBG digesters
-              </span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-500 font-medium block">
-                Crop Stubble Diverted
-              </span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-amber-700 font-mono tabular-nums">
-                720.5 <span className="text-sm font-sans font-semibold text-slate-500">kg</span>
-              </span>
-              <span className="text-[11px] text-amber-800 font-semibold mt-0.5 block">
-                Zero open-field smoke burning
-              </span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-500 font-medium block">
-                Farmer Wallet Credits Paid
-              </span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#14532D] font-mono tabular-nums">
-                ₹3,510.00
-              </span>
-              <span className="text-[11px] text-slate-600 font-semibold mt-0.5 block">
-                Direct village cooperative payout
-              </span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-500 font-medium block">
-                Free Bio-Slurry Reclaimed
-              </span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#0F766E] font-mono tabular-nums">
-                595 <span className="text-sm font-sans font-semibold text-slate-500">Liters</span>
-              </span>
-              <span className="text-[11px] text-teal-800 font-semibold mt-0.5 block">
-                Rebuilding farm soil organic carbon
-              </span>
-            </div>
-          </div>
-
-        </div>
-      </section>
+        </section>
 
       {/* 2. INTERACTIVE CRISIS SECTION (RURAL ORGANIC CRISIS) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -461,10 +473,12 @@ export const HomeView: React.FC = () => {
 
             <div className="lg:col-span-6 relative min-h-[300px] lg:min-h-full bg-slate-100">
               <img
-                src="/src/assets/images/waste_segregation_logistics_1793281154707.jpg"
+                src="/images/waste_segregation_logistics_1793281154707.jpg"
                 alt="Village biomass depot with digital crane scale and electric pickup vehicle"
-                referrerPolicy="no-referrer"
                 className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-4 left-4 right-4 text-white text-xs">
